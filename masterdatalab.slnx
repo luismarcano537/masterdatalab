@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="masterdatalab.database/masterdatalab.database.sqlproj" Id="01d7ec0c-6fc7-4b60-a968-bd8a0cebe77c">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="masterdatalab.domain/masterdatalab.domain.csproj" />
+  <Project Path="masterdatalab.web/masterdatalab.web.csproj" />
+</Solution>
