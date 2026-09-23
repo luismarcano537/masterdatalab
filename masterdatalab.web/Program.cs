@@ -1,4 +1,5 @@
 using JJMasterData.Web.Configuration;
+using masterdatalab.domain.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+
+builder.Services.AddServices();
 
 builder.Services.AddJJMasterDataWeb();
 
