@@ -1,0 +1,24 @@
+﻿@model masterdatalab.domain.Models.ViewModels.PedidosViewModel
+@{ ViewData["Title"] = "Novo pedido"; }
+
+<div class="d-flex align-items-center gap-3 mt-3 mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">← Pedidos</a>
+    <h3 class="mb-0">Novo pedido</h3>
+</div>
+
+<form asp-action="Create" method="post">
+    <div class="card">
+        <div class="card-body">
+            @Html.Raw(ViewBag.Content)
+
+            @if (Model.ValidationSummaryHtml is not null)
+            {
+                @Html.Raw(Model.ValidationSummaryHtml)
+            }
+            <partial name="_Erros" model="Model.Erros" />
+
+            <button type="submit" class="btn btn-primary mt-2">Salvar</button>
+            <a asp-action="Index" class="btn btn-secondary mt-2">Cancelar</a>
+        </div>
+    </div>
+</form>
