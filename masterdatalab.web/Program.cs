@@ -10,6 +10,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 
 builder.Services.AddServices();
+builder.Services.AddRepositories();
 
 builder.Services.AddJJMasterDataWeb();
 

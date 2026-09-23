@@ -1,3 +1,5 @@
+using masterdatalab.domain.Models.DTOs.Cliente;
+using masterdatalab.domain.Repositories;
 using masterdatalab.web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;

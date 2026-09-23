@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using masterdatalab.domain.Services;
+using masterdatalab.domain.Repositories;
 
 namespace masterdatalab.domain.Extensions
 {
@@ -15,6 +16,12 @@ namespace masterdatalab.domain.Extensions
             services.AddScoped<PedidoItemService>();
             services.AddScoped<CadastroService>();
             return services;
+        }
+
+        public static IServiceCollection AddRepositories(this IServiceCollection repositories)
+        {
+            repositories.AddScoped<ClienteRepository>();
+            return repositories;
         }
     }
 }
