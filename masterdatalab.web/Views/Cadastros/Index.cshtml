@@ -1,0 +1,5 @@
+﻿@{ ViewData["Title"] = ViewBag.Titulo; }
+
+<form asp-controller="Cadastros" asp-action="Index" asp-route-elementName="@ViewContext.RouteData.Values["elementName"]" method="post">
+    @Html.Raw(ViewBag.Content)
+</form>
