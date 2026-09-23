@@ -33,13 +33,13 @@ namespace masterdatalab.domain.Repositories
 
         public Task<List<ClienteResponse>> GetAllAsync(int page, int pageSize)
         {
-            var offSet = (page - 1) * pageSize;
+            var offset = (page - 1) * pageSize;
 
             var cmd = new DataAccessCommand
             {
                 Sql = $"SELECT {colunas} FROM Cliente ORDER BY nome OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY"
             };
-            cmd.Parameters.Add(new DataAccessParameter("@Offset", offSet, DbType.Int32));
+            cmd.Parameters.Add(new DataAccessParameter("@Offset", offset, DbType.Int32));
             cmd.Parameters.Add(new DataAccessParameter("@PageSize", pageSize, DbType.Int32));
             return GetListAsync<ClienteResponse>(cmd);
         }
@@ -48,7 +48,7 @@ namespace masterdatalab.domain.Repositories
         {
             var cmd = new DataAccessCommand
             {
-                Sql = $"INSERT INTO Cliente (nome, documento, razao_social) OUTPUT INSERTED.id VALUES(@Nome, @Documento, @RazaoSocial)"
+                Sql = "INSERT INTO Cliente (nome, documento, razao_social) OUTPUT INSERTED.id VALUES(@Nome, @Documento, @RazaoSocial)"
             };
             cmd.Parameters.Add(new DataAccessParameter("@Nome", (object)cliente.Nome, DbType.String));
             cmd.Parameters.Add(new DataAccessParameter("@Documento", (object)cliente.Documento, DbType.String));

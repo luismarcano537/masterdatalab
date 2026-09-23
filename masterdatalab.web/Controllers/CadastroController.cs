@@ -1,4 +1,6 @@
 ﻿using JJMasterData.Web.Extensions;
+using masterdatalab.domain.Models.DTOs.Produtos;
+using masterdatalab.domain.Repositories;
 using masterdatalab.domain.Services;
 using Microsoft.AspNetCore.Mvc;
 

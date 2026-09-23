@@ -1,4 +1,5 @@
 using masterdatalab.domain.Models.DTOs.Cliente;
+using masterdatalab.domain.Models.DTOs.Produtos;
 using masterdatalab.domain.Repositories;
 using masterdatalab.web.Models;
 using Microsoft.AspNetCore.Mvc;

@@ -21,6 +21,7 @@ namespace masterdatalab.domain.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection repositories)
         {
             repositories.AddScoped<ClienteRepository>();
+            repositories.AddScoped<ProdutoRepository>();
             return repositories;
         }
     }
