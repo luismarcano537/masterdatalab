@@ -18,7 +18,7 @@ namespace masterdatalab.web.Controllers
                 return actionResult;
 
             ViewBag.Content = result.HtmlContent;
-            ViewBag.Titulo = CadastroService.Elementos[elementName];
+            ViewBag.Titulo = CadastroService.Elementos[elementName].Menu;
             return View();
         }
     }
