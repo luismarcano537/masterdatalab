@@ -1,0 +1,10 @@
+﻿@model List<string>?
+
+@if (Model is { Count: > 0 })
+{
+    <div class="alert alert-danger mt-2">
+        <ul class="mb-0">
+            @foreach (var e in Model) { <li>@e</li> }
+        </ul>
+    </div>
+}
