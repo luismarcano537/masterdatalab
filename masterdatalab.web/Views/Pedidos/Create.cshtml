@@ -15,7 +15,7 @@
             {
                 @Html.Raw(Model.ValidationSummaryHtml)
             }
-            <partial name="_Erros" model="Model.Erros" />
+            @Html.Raw(Model.MensagemHtml)
 
             <button type="submit" class="btn btn-primary mt-2">Salvar</button>
             <a asp-action="Index" class="btn btn-secondary mt-2">Cancelar</a>

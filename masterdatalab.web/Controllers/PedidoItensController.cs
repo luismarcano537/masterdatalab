@@ -1,6 +1,7 @@
 ﻿using JJMasterData.Web.Extensions;
 using masterdatalab.domain.Models.ViewModels;
 using masterdatalab.domain.Services;
+using masterdatalab.web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace masterdatalab.web.Controllers
@@ -13,7 +14,7 @@ namespace masterdatalab.web.Controllers
             var panel = await itemService.SetupDataPanelItemAsync(codPedido);
             var result = await panel.GetResultAsync();
 
-            if(result is IActionResult actionResult)
+            if (result is IActionResult actionResult)
                 return actionResult;
 
             ViewBag.Content = result.HtmlContent;
@@ -32,7 +33,15 @@ namespace masterdatalab.web.Controllers
             var vm = await itemService.SalvarItemAsync(panel);
 
             if (!vm.TemErros)
+            {
+                TempData["Mensagem"] = "Item adicionado ao pedido.";
                 return RedirectToAction("Edit", "Pedidos", new { codPedido });
+            }
+
+            if (vm.Erros.Count > 0)
+            {
+                vm.MensagemHtml = Mensagens.Erro(vm.Erros);
+            }
 
             vm.CodPedido = codPedido;
             ViewBag.Content = (await panel.GetResultAsync()).HtmlContent;
