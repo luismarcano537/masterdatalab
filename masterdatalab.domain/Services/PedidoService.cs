@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
+using masterdatalab.domain.Repositories;
 
 namespace masterdatalab.domain.Services
 {
@@ -21,7 +22,7 @@ namespace masterdatalab.domain.Services
         IHttpContextAccessor contextAccessor,
         LinkGenerator linkGen,
         IEntityRepository repository,
-        IDataDictionaryRepository dictionaryRepository)
+        PedidoRepository pedidoRepo)
     {
         public async Task<ComponentResult> SetupFormViewAsync()
         {
@@ -88,6 +89,8 @@ namespace masterdatalab.domain.Services
             return panel;
         }
 
+        public Task<int?> ObterStatusAsync(int codPedido) => pedidoRepo.GetStatusAsync(codPedido);
+
         public async Task<PedidosViewModel> SalvarAsync(JJDataPanel panel)
         {
             var vm = new PedidosViewModel { DataPanel = panel };
@@ -118,7 +121,7 @@ namespace masterdatalab.domain.Services
 
                 var novoStatus = Convert.ToInt32(values["status"]);
 
-                if (novoStatus == (int)SituacaoPedido.PagamentoAprovado && !await PossuiItensAsync(codPedido))
+                if (novoStatus == (int)SituacaoPedido.PagamentoAprovado && !await pedidoRepo.PossuiItensAsync(codPedido))
                 {
                     vm.Erros.Add("Não é possível aprovar o pagamento de um pedido sem itens.");
                     return vm;
@@ -130,42 +133,14 @@ namespace masterdatalab.domain.Services
             return vm;
         }
 
-        public async Task<int?> ObterStatusAsync(int codPedido)
-        {
-            var element = await dictionaryRepository.GetFormElementAsync("Pedidos");
-            var pedido = await repository.GetFieldsAsync(element, new Dictionary<string, object> { ["id"] = codPedido });
-            return pedido is null ? null : Convert.ToInt32(pedido["status"]);
-        }
-        public async Task<int?> ObterClienteAsync(int codPedido)
-        {
-            var element = await dictionaryRepository.GetFormElementAsync("Pedidos");
-            var pedido = await repository.GetFieldsAsync(element, new Dictionary<string, object> { ["id"] = codPedido });
-            return pedido is null ? null : Convert.ToInt32(pedido["id_cliente"]);
-        }
-
         public async Task<string?> ValidarPendenteAsync(int codPedido)
         {
-            var status = await ObterStatusAsync(codPedido);
+            var status = await pedidoRepo.GetStatusAsync(codPedido);
             if (status is null)
                 return "Pedido não encontrado.";
             if (status != (int)SituacaoPedido.PendenteConfirmacao)
                 return "Só é possível alterar pedidos pendentes de confirmação.";
             return null;
         }
-
-        public async Task<Dictionary<string, object?>?> BuscarUmAsync(string elementName, Dictionary<string, object?> filtros)
-        {
-            var element = await dictionaryRepository.GetFormElementAsync(elementName);
-            var parameters = new EntityParameters { Filters = filtros, RecordsPerPage = 1 };
-            var result = await repository.GetDictionaryListAsync(element, parameters);
-            return result.FirstOrDefault();
-        }
-
-        private async Task<bool> PossuiItensAsync(int codPedido)
-        {
-            var linha = await BuscarUmAsync("ItemPedidos", new() { ["pedido_id"] = codPedido });
-            return linha is not null;
-        }
-
     }
 }

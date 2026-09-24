@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using JJConsulting.FontAwesome;
+using masterdatalab.domain.Repositories;
 
 namespace masterdatalab.domain.Services
 {
@@ -17,7 +18,10 @@ namespace masterdatalab.domain.Services
         IHttpContextAccessor contextAccessor,
         LinkGenerator linkGen,
         IEntityRepository repository,
-        PedidoService pedidoService)
+        PedidoService pedidoService,
+        PedidoRepository pedidoRepo,
+        ItemPedidoRepository itemRepo,
+        TabelaPrecoRepository precoRepo)
     {
         public async Task<JJFormView> SetupFormViewItemAsync(int codPedido, int statusPedido)
         {
@@ -62,21 +66,10 @@ namespace masterdatalab.domain.Services
             panel.FormElement.Fields["pedido_id"].ReadOnlyExpression = "val:1";
             panel.FormElement.Fields["valor_unit"].ReadOnlyExpression = "val:1";
 
-            var clienteId = await pedidoService.ObterClienteAsync(codPedido);
+            var clienteId = await pedidoRepo.GetClienteAsync(codPedido);
             panel.UserValues["cliente_id"] = clienteId ?? 0;
 
             return panel;
-        }
-        private async Task<decimal?> ObterPrecoAsync(int clienteId, int codProduto)
-        {
-            var linha = await pedidoService.BuscarUmAsync("tabela_precos", new() { ["cod_cliente"] = clienteId, ["cod_produto"] = codProduto });
-            return linha is null ? null : Convert.ToDecimal(linha["valor_unit"]);
-        }
-
-        private async Task<bool> ItemJaExisteAsync(int codPedido, int codProduto)
-        {
-            var linha = await pedidoService.BuscarUmAsync("ItemPedidos", new() { ["pedido_id"] = codPedido, ["item_id"] = codProduto });
-            return linha is not null;
         }
 
         public async Task<PedidosViewModel> SalvarItemAsync(JJDataPanel panel)
@@ -110,14 +103,14 @@ namespace masterdatalab.domain.Services
 
             var codProduto = Convert.ToInt32(values["item_id"]);
 
-            if (await ItemJaExisteAsync(codPedido, codProduto))
+            if (await itemRepo.ItemJaExisteAsync(codPedido, codProduto))
             {
                 vm.Erros.Add("Este produto já está no pedido. Altere a quantidade do item existente.");
                 return vm;
             }
 
-            var clienteId = await pedidoService.ObterClienteAsync(codPedido);
-            var preco = await ObterPrecoAsync(clienteId ?? 0, codProduto);
+            var clienteId = await pedidoRepo.GetClienteAsync(codPedido);
+            var preco = await precoRepo.GetPrecoAsync(clienteId ?? 0, codProduto);
 
             if (preco is null)
             {
@@ -134,20 +127,17 @@ namespace masterdatalab.domain.Services
 
         public async Task<(int? codPedido, string? erro)> ExcluirItemAsync(int id)
         {
-            var element = (await factory.DataPanel.CreateAsync("ItemPedidos")).FormElement;
-            var item = await repository.GetFieldsAsync(element, new Dictionary<string, object> { ["id"] = id });
+            var item = await itemRepo.GetByIdAsync(id);
 
             if (item is null)
                 return (null, "Item não encontrado.");
 
-            var codPedido = Convert.ToInt32(item["pedido_id"]);
-
-            var erro = await pedidoService.ValidarPendenteAsync(codPedido);
+            var erro = await pedidoService.ValidarPendenteAsync(item.PedidoId);
             if (erro is not null)
-                return (codPedido, erro);
+                return (item.PedidoId, erro);
 
-            await repository.DeleteAsync(element, new Dictionary<string, object> { ["id"] = id });
-            return (codPedido, null);
+            await itemRepo.DeleteAsync(id);
+            return (item.PedidoId, null);
         }
     }
 }
