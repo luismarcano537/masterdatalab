@@ -25,6 +25,7 @@ namespace masterdatalab.domain.Extensions
             repositories.AddScoped<TabelaPrecoRepository>();
             repositories.AddScoped<SituacaoRepository>();
             repositories.AddScoped<PedidoRepository>();
+            repositories.AddScoped<ItemPedidoRepository>();
             return repositories;
         }
     }
