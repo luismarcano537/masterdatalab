@@ -31,5 +31,11 @@ namespace masterdatalab.domain.Repositories
 
         protected Task<int> ExecuteAsync(DataAccessCommand cmd)
             => dataAccess.SetCommandAsync(cmd);
+
+        protected async Task<T?> ScalarAsync<T>(DataAccessCommand cmd) where T : struct
+        {
+            var result = await dataAccess.GetResultAsync(cmd);
+            return result is null || result == DBNull.Value ? null : (T)Convert.ChangeType(result, typeof(T));
+        }
     }
 }
