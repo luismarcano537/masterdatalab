@@ -16,9 +16,10 @@
 <body>
     <div class="container-fluid">
         <nav class="navbar navbar-expand bg-light px-3 mb-3">
-            <a class="navbar-brand" asp-controller="Home" asp-action="Index">MasterDataLab</a>
+            <a class="navbar-brand" asp-area="" asp-controller="Dashboard" asp-action="Index">MasterDataLab</a>
             <div class="navbar-nav">
-                <a class="nav-link" asp-controller="Pedidos" asp-action="Index">Pedidos</a>
+                <a class="nav-link" asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                <a class="nav-link" asp-area="" asp-controller="Pedidos" asp-action="Index">Pedidos</a>
 
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Cadastros</a>
@@ -30,7 +31,7 @@
                     </ul>
                 </div>
 
-                <a class="nav-link" href="/DataDictionary">Dicionário</a>
+                <a class="nav-link" href="/DataDictionary">MasterData</a>
             </div>
         </nav>
         @RenderBody()

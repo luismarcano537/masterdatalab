@@ -10,5 +10,6 @@ namespace masterdatalab.domain.Models.DTOs.Dashboard
         public string Situacao { get; set; } = string.Empty;
         public int Qtd { get; set; }
         public decimal Total { get; set; }
+        public string Cor { get; set; } = string.Empty;
     }
 }

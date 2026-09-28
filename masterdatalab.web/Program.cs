@@ -40,7 +40,7 @@ await app.UseMasterDataSeedingAsync();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Dashboard}/{action=Index}")
     .WithStaticAssets();
 
 

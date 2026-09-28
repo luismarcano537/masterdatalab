@@ -8,7 +8,7 @@ namespace masterdatalab.domain.Models.DTOs.Dashboard
     {
         public int Codigo { get; set; }
         public string Produto { get; set; } = string.Empty;
-        public int QtdeUnidades { get; set; }
+        public int QtdUnidades { get; set; }
         public decimal Total { get; set; }
     }
 }

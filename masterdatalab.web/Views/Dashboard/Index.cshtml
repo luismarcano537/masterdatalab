@@ -1,0 +1,105 @@
+﻿@model masterdatalab.domain.Models.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h3 class="mt-3 mb-3">Dashboard</h3>
+
+<form method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-auto">
+        <label class="form-label mb-0">De</label>
+        <input type="date" name="de" class="form-control" value="@Model.De?.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-auto">
+        <label class="form-label mb-0">Até</label>
+        <input type="date" name="ate" class="form-control" value="@Model.Ate?.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Limpar</a>
+    </div>
+</form>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-muted small">Pedidos no período</div>
+                <div class="fs-3">@Model.TotalPedidos</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-muted small">Pendentes de confirmação</div>
+                <div class="fs-3">@Model.TotalPendentes</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-muted small">Faturamento (aprovados + faturados)</div>
+                <div class="fs-3">@Model.Faturamento.ToString("C")</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">Por situação</div>
+            <table class="table table-sm mb-0">
+                <thead><tr><th>Situação</th><th class="text-end">Pedidos</th><th class="text-end">Total</th></tr></thead>
+                <tbody>
+                    @foreach (var s in Model.PorSituacao)
+                    {
+                        <tr>
+                            <td><span class="badge" style="background-color:@(s.Cor ?? "#6c757d")">&nbsp;</span> @s.Situacao</td>
+                            <td class="text-end">@s.Qtd</td>
+                            <td class="text-end">@s.Total.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">Faturamento por cliente</div>
+            <table class="table table-sm mb-0">
+                <thead><tr><th>Cliente</th><th class="text-end">Pedidos</th><th class="text-end">Total</th></tr></thead>
+                <tbody>
+                    @foreach (var c in Model.PorCliente)
+                    {
+                        <tr>
+                            <td>@c.Cliente</td>
+                            <td class="text-end">@c.QtdPedidos</td>
+                            <td class="text-end">@c.Total.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">Top 5 produtos</div>
+    <table class="table table-sm mb-0">
+        <thead><tr><th>Código</th><th>Produto</th><th class="text-end">Unidades</th><th class="text-end">Total</th></tr></thead>
+        <tbody>
+            @foreach (var p in Model.TopProdutos)
+            {
+                <tr>
+                    <td>@p.Codigo</td>
+                    <td>@p.Produto</td>
+                    <td class="text-end">@p.QtdUnidades</td>
+                    <td class="text-end">@p.Total.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
