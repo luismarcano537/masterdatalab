@@ -15,6 +15,7 @@ namespace masterdatalab.domain.Extensions
             services.AddScoped<PedidoService>();
             services.AddScoped<PedidoItemService>();
             services.AddScoped<CadastroService>();
+            services.AddScoped<DashboardService>();
             return services;
         }
 
@@ -26,6 +27,7 @@ namespace masterdatalab.domain.Extensions
             repositories.AddScoped<SituacaoRepository>();
             repositories.AddScoped<PedidoRepository>();
             repositories.AddScoped<ItemPedidoRepository>();
+            repositories.AddScoped<DashboardRepository>();
             return repositories;
         }
     }
